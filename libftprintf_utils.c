@@ -6,66 +6,100 @@
 /*   By: wecorzo- <wecorzo-@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 18:33:00 by wecorzo-          #+#    #+#             */
-/*   Updated: 2023/08/12 20:35:13 by wecorzo-         ###   ########.fr       */
+/*   Updated: 2023/08/15 19:29:53 by wecorzo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_strlen(char const *str)
+int	ft_putchar(char c)
+{
+	write(1, &c, 1);
+	return (1);
+}
+
+int	ft_putstr(char *str)
 {
 	int	i;
 
-	i = 0;
 	if (!str)
-		return (0);
-	while (str[i])
-		i++;
+	{
+		write(1, "(null)", 6);
+		i = 6;
+	}
+	else
+	{
+		write(1, str, ft_strlen(str));
+		i = ft_strlen(str);
+	}
 	return (i);
 }
-
-void	ft_putchar(char c)
+int	ft_len(long long n, int base)
 {
-	write(1, &c, 1);
+	int	len;
+
+	len = 0;
+	if (n <= 0)
+		len = 1;
+	while (n != 0)
+	{
+		len++;
+		n = n / base;
+	}
+	return (len);
 }
-
-void	ft_putstr(char *str)
+int	ft_putnbr(int num, char signo, int base)
 {
-	write(1, str, ft_strlen(str));
-}
+	int				i;
+	unsigned  int	num_long;
 
-void	ft_putnbr(int num)
-{
-	unsigned int	num_long;
-
+	i = 0;
 	if (num < 0)
 	{
-		ft_putchar('-');
+		if (signo == '-')
+			ft_putchar('-');
 		num_long = (num * -1);
 	}
 	else
 		num_long = num;
 	if (num_long <= 9)
-		ft_putchar(num_long + '0');
+		ft_putchar((num_long + '0'));
 	if (num_long > 9)
 	{
-		ft_putnbr(num_long / 10);
-		ft_putnbr(num_long % 10);
+		ft_putnbr(num_long / base, signo, base);
+		ft_putnbr(num_long % base, signo, base);
 	}
+	i = ft_len(num, base);
+	return (i);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	ft_printhex(unsigned long long ptr, char c)
 {
-	char	*str;
-	char	cc;
+	int		i;
+	char	x_def;
 
-	str = ((char *)s);
-	cc = (char)c;
-	while (*str != cc)
+	i = 0;
+	x_def = 'a';
+	if (c == 'p')
 	{
-		if (*str == '\0')
-			return (NULL);
-		str++;
+		write(1, "0x", 2);
+		c = 'a';
+		i += 2;
 	}
-	return (str);
+	if (c == 'X')
+		x_def = 'A';
+	if (ptr < 16)
+	{
+		if (ptr < 10)
+			ft_putchar(ptr + '0');
+		else
+			ft_putchar(ptr - 10 + x_def);
+	}
+	else
+	{
+		ft_printhex(ptr / 16, c);
+		ft_printhex(ptr % 16, c);
+	}
+	i += ft_len(ptr, 16);
+	return (i);
 }
