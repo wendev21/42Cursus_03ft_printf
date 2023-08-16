@@ -6,7 +6,7 @@
 /*   By: wecorzo- <wecorzo-@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/12 18:33:00 by wecorzo-          #+#    #+#             */
-/*   Updated: 2023/08/15 19:29:53 by wecorzo-         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:00:44 by wecorzo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	ft_putstr(char *str)
 	}
 	return (i);
 }
+
 int	ft_len(long long n, int base)
 {
 	int	len;
@@ -48,10 +49,11 @@ int	ft_len(long long n, int base)
 	}
 	return (len);
 }
+
 int	ft_putnbr(int num, char signo, int base)
 {
 	int				i;
-	unsigned  int	num_long;
+	unsigned int	num_long;
 
 	i = 0;
 	if (num < 0)
@@ -73,33 +75,30 @@ int	ft_putnbr(int num, char signo, int base)
 	return (i);
 }
 
-int	ft_printhex(unsigned long long ptr, char c)
+int	ft_printhex(unsigned long long ptr, char c, int *i)
 {
-	int		i;
 	char	x_def;
 
-	i = 0;
 	x_def = 'a';
 	if (c == 'p')
 	{
 		write(1, "0x", 2);
 		c = 'a';
-		i += 2;
+		*i += 2;
 	}
 	if (c == 'X')
 		x_def = 'A';
 	if (ptr < 16)
 	{
 		if (ptr < 10)
-			ft_putchar(ptr + '0');
+			*i += ft_putchar(ptr + '0');
 		else
-			ft_putchar(ptr - 10 + x_def);
+			*i += ft_putchar(ptr - 10 + x_def);
 	}
 	else
 	{
-		ft_printhex(ptr / 16, c);
-		ft_printhex(ptr % 16, c);
+		ft_printhex(ptr / 16, c, i);
+		ft_printhex(ptr % 16, c, i);
 	}
-	i += ft_len(ptr, 16);
-	return (i);
+	return (*i);
 }

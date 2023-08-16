@@ -6,7 +6,7 @@
 /*   By: wecorzo- <wecorzo-@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 17:37:43 by wecorzo-          #+#    #+#             */
-/*   Updated: 2023/08/15 19:46:58 by wecorzo-         ###   ########.fr       */
+/*   Updated: 2023/08/15 21:15:57 by wecorzo-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ int	find_format(char c, va_list args)
 	else if (c == 'i' || c == 'd')
 		len += ft_putnbr(va_arg(args, long int), '-', 10);
 	else if (c == 'u')
-		len += ft_putnum(va_arg(args, unsigned long long int), 10);
-	else if (c == 'p' || c == 'x')
-		len += ft_printhex(va_arg(args, unsigned long), c);
-	else if (c == 'X')
-		len += ft_printhex(va_arg(args, unsigned long), c);
+		len += ft_putnum(va_arg(args, unsigned int), 10);
+	else if (c == 'X' || c == 'x')
+		ft_printhex(va_arg(args, unsigned int), c, &len);
+	else if (c == 'p')
+		ft_printhex(va_arg(args, unsigned long), c, &len);
 	return (len);
 }
 
